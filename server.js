@@ -17,6 +17,12 @@ const CONTACT_RECEIVER = process.env.CONTACT_RECEIVER || 'manojsairm@gmail.com';
 // With it unset, only same-origin requests are allowed.
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || false;
 
+// Allows this page to be shown inside an <iframe> on another site (e.g. a
+// Google Sites page embedding it) when FRAME_ANCESTORS is set in .env, e.g.
+// "https://sites.google.com". Left unset, no other site can iframe this page
+// (standard clickjacking protection).
+const FRAME_ANCESTORS = process.env.FRAME_ANCESTORS || null;
+
 const DATA_DIR = path.join(__dirname, 'data');
 const MESSAGES_FILE = path.join(DATA_DIR, 'messages.json');
 
@@ -24,7 +30,20 @@ if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
 if (!fs.existsSync(MESSAGES_FILE)) fs.writeFileSync(MESSAGES_FILE, '[]');
 
 app.set('trust proxy', 1);
-app.use(helmet());
+app.use(
+  helmet({
+    // CSP's frame-ancestors directive supersedes X-Frame-Options in modern
+    // browsers, so frameguard is disabled and frame-ancestors is the single
+    // source of truth for who may iframe this page.
+    frameguard: false,
+    contentSecurityPolicy: {
+      directives: {
+        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+        'frame-ancestors': FRAME_ANCESTORS ? ["'self'", FRAME_ANCESTORS] : ["'self'"],
+      },
+    },
+  })
+);
 // cors() with no options defaults to Access-Control-Allow-Origin: * (any site).
 // Only enable it, scoped to one origin, when the frontend is served from
 // elsewhere; otherwise skip it so the browser's same-origin policy applies.
