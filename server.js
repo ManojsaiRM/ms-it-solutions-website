@@ -62,9 +62,15 @@ function sanitizeBody(value) {
   return String(value).replace(/\r\n/g, '\n').replace(/[\u0000-\u0009\u000b-\u001f]+/g, '').trim();
 }
 
-// ---- Mailer (optional - only used if SMTP env vars are set) ----
+// ---- Mailer ----
+// Preferred: Resend's HTTP API (travels over port 443, so it works on hosts
+// like Render's free tier that block outbound SMTP ports). Falls back to
+// SMTP via nodemailer for hosts where that isn't an issue (e.g. local dev).
+const RESEND_API_KEY = process.env.RESEND_API_KEY || null;
+const RESEND_FROM = process.env.RESEND_FROM || 'MS IT Solutions <onboarding@resend.dev>';
+
 let transporter = null;
-if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+if (!RESEND_API_KEY && process.env.SMTP_USER && process.env.SMTP_PASS) {
   const smtpPort = Number(process.env.SMTP_PORT) || 465;
   transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST || 'smtp.gmail.com',
@@ -76,6 +82,42 @@ if (process.env.SMTP_USER && process.env.SMTP_PASS) {
       pass: process.env.SMTP_PASS,
     },
   });
+}
+
+async function sendContactEmail(entry) {
+  const subject = `New enquiry from ${entry.name} - MS IT Solutions`;
+  const text = `Name: ${entry.name}\nEmail: ${entry.email}\nPhone: ${entry.phone}\n\nMessage:\n${entry.message}`;
+
+  if (RESEND_API_KEY) {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: RESEND_FROM,
+        to: CONTACT_RECEIVER,
+        reply_to: entry.email,
+        subject,
+        text,
+      }),
+    });
+    if (!res.ok) {
+      throw new Error(`Resend API error ${res.status}: ${await res.text()}`);
+    }
+    return;
+  }
+
+  if (transporter) {
+    await transporter.sendMail({
+      from: `"MS IT Solutions Website" <${process.env.SMTP_USER}>`,
+      to: CONTACT_RECEIVER,
+      replyTo: entry.email,
+      subject,
+      text,
+    });
+  }
 }
 
 // ---- Data: services offered (drives the frontend dynamically) ----
@@ -162,15 +204,9 @@ app.post('/api/contact', contactLimiter, async (req, res) => {
     console.error('Failed to persist message:', err);
   }
 
-  if (transporter) {
+  if (RESEND_API_KEY || transporter) {
     try {
-      await transporter.sendMail({
-        from: `"MS IT Solutions Website" <${process.env.SMTP_USER}>`,
-        to: CONTACT_RECEIVER,
-        replyTo: entry.email,
-        subject: `New enquiry from ${entry.name} - MS IT Solutions`,
-        text: `Name: ${entry.name}\nEmail: ${entry.email}\nPhone: ${entry.phone}\n\nMessage:\n${entry.message}`,
-      });
+      await sendContactEmail(entry);
     } catch (err) {
       console.error('Failed to send email (message was still saved):', err.message);
     }
@@ -181,7 +217,11 @@ app.post('/api/contact', contactLimiter, async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`MS IT Solutions website running at http://localhost:${PORT}`);
-  if (!transporter) {
-    console.log('(SMTP not configured - contact messages are saved to data/messages.json only. See .env.example.)');
+  if (RESEND_API_KEY) {
+    console.log('Email: sending contact form messages via Resend.');
+  } else if (transporter) {
+    console.log('Email: sending contact form messages via SMTP.');
+  } else {
+    console.log('(No email method configured - contact messages are saved to data/messages.json only. See .env.example.)');
   }
 });
