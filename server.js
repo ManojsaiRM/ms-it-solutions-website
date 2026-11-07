@@ -65,10 +65,12 @@ function sanitizeBody(value) {
 // ---- Mailer (optional - only used if SMTP env vars are set) ----
 let transporter = null;
 if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+  const smtpPort = Number(process.env.SMTP_PORT) || 465;
   transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST || 'smtp.gmail.com',
-    port: Number(process.env.SMTP_PORT) || 465,
-    secure: true,
+    port: smtpPort,
+    secure: smtpPort === 465,
+    connectionTimeout: 10000,
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
