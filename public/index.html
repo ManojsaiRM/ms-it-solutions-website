@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MS IT Solutions - Websites, Apps & IT Services</title>
+<meta name="description" content="MS IT Solutions by Manojsai RM - custom websites, mobile apps, cloud setup and IT support/consulting." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header class="site-header" id="top">
+  <div class="container header-inner">
+    <a href="#top" class="brand">
+      <span class="brand-mark">MS</span>
+      <span class="brand-text">MS IT Solutions</span>
+    </a>
+
+    <nav class="nav" id="nav">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#why">Why Us</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <div class="header-actions">
+      <button id="theme-toggle" class="icon-btn" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>
+      </button>
+      <a href="#contact" class="btn btn-primary btn-sm">Get a Quote</a>
+      <button id="nav-toggle" class="icon-btn nav-burger" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-copy reveal">
+        <p class="eyebrow">IT Solutions &amp; Software Development</p>
+        <h1>We build websites, apps &amp; IT systems that just <span class="accent">work</span>.</h1>
+        <p class="hero-sub">
+          MS IT Solutions helps businesses and individuals get online, automate the boring stuff,
+          and keep their tech running - without the jargon or the markup.
+        </p>
+        <div class="hero-ctas">
+          <a href="#contact" class="btn btn-primary">Start a Project</a>
+          <a href="#services" class="btn btn-ghost">See Services</a>
+        </div>
+        <div class="hero-stats">
+          <div><strong>Fast</strong><span>Turnaround</span></div>
+          <div><strong>Direct</strong><span>Communication</span></div>
+          <div><strong>Fair</strong><span>Pricing</span></div>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal">
+        <div class="code-card">
+          <div class="code-card-dots"><span></span><span></span><span></span></div>
+          <pre><code><span class="tok-kw">const</span> solution = {
+  client: <span class="tok-str">"your business"</span>,
+  stack: <span class="tok-str">"lightweight"</span>,
+  built_by: <span class="tok-str">"MS IT Solutions"</span>,
+  status: <span class="tok-str">"shipped"</span> <span class="tok-cmt">// on time</span>
+};</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section">
+    <div class="container about-inner">
+      <div class="reveal">
+        <p class="section-tag">About</p>
+        <h2>Hi, I'm Manojsai RM - the person behind MS IT Solutions.</h2>
+        <p class="muted">
+          MS IT Solutions is a one-person-to-one-team IT service built around solving real problems:
+          getting a business online, turning an idea into a working app, or fixing IT headaches that
+          cost you time every week. Every project is handled directly - no account managers, no
+          outsourcing, just clear communication from start to finish.
+        </p>
+        <ul class="check-list">
+          <li>Clear scope and pricing before any work starts</li>
+          <li>Lightweight, maintainable tech - not over-engineered</li>
+          <li>Support after launch, not just at handoff</li>
+        </ul>
+      </div>
+      <div class="about-card reveal">
+        <h3>Manojsai RM</h3>
+        <p class="role">Founder, MS IT Solutions</p>
+        <a href="mailto:manojsairm@gmail.com" class="contact-line">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+          manojsairm@gmail.com
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES (rendered dynamically from /api/services) -->
+  <section id="services" class="section section-alt">
+    <div class="container">
+      <p class="section-tag center">What I Do</p>
+      <h2 class="center">Services</h2>
+      <p class="muted center section-intro">
+        End-to-end IT solutions - from the first line of code to ongoing support.
+      </p>
+
+      <div id="services-grid" class="services-grid">
+        <!-- JS populates this from the backend API; skeleton cards shown while loading -->
+        <div class="service-card skeleton"></div>
+        <div class="service-card skeleton"></div>
+        <div class="service-card skeleton"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section id="why" class="section">
+    <div class="container">
+      <p class="section-tag center">Why MS IT Solutions</p>
+      <h2 class="center">Built for small teams &amp; growing businesses</h2>
+
+      <div class="why-grid">
+        <div class="why-card reveal">
+          <div class="why-icon">⚡</div>
+          <h3>Lightweight by default</h3>
+          <p>No bloated frameworks or unnecessary dependencies - just fast, reliable software.</p>
+        </div>
+        <div class="why-card reveal">
+          <div class="why-icon">🔗</div>
+          <h3>Properly connected</h3>
+          <p>Frontend, backend and data are wired together correctly from day one - not duct-taped.</p>
+        </div>
+        <div class="why-card reveal">
+          <div class="why-icon">💬</div>
+          <h3>Direct access</h3>
+          <p>You talk to the person actually building your project - no middle layers.</p>
+        </div>
+        <div class="why-card reveal">
+          <div class="why-icon">🛠️</div>
+          <h3>Support that continues</h3>
+          <p>Launch day isn't the finish line. Updates and fixes are part of the service.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section section-alt">
+    <div class="container contact-inner">
+      <div class="reveal">
+        <p class="section-tag">Get in touch</p>
+        <h2>Let's talk about your project</h2>
+        <p class="muted">
+          Tell me a bit about what you need - a website, an app, or just IT help - and I'll get back
+          to you by email.
+        </p>
+
+        <div class="contact-details">
+          <a href="mailto:manojsairm@gmail.com" class="contact-line">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+            manojsairm@gmail.com
+          </a>
+        </div>
+      </div>
+
+      <form id="contact-form" class="contact-form reveal" novalidate>
+        <div class="form-row">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" placeholder="Your full name" required />
+        </div>
+        <div class="form-row">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required />
+        </div>
+        <div class="form-row">
+          <label for="phone">Phone <span class="optional">(optional)</span></label>
+          <input type="tel" id="phone" name="phone" placeholder="+91 ..." />
+        </div>
+        <div class="form-row">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="4" placeholder="What are you looking to build?" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" id="contact-submit">Send Message</button>
+        <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div>
+      <span class="brand-mark small">MS</span>
+      <span>MS IT Solutions</span>
+    </div>
+    <p>&copy; <span id="year"></span> MS IT Solutions - Manojsai RM. All rights reserved.</p>
+    <a href="mailto:manojsairm@gmail.com">manojsairm@gmail.com</a>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
